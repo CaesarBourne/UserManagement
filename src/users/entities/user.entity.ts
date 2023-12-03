@@ -12,10 +12,13 @@ export class User {
   description: string;
 
   @Column()
-  filename: string;
+  firstName: string;
 
-  @Column('int')
-  views: number;
+  @Column()
+  lastName: string;
+
+  @Column({})
+  order: object;
 
   @Column()
   isPublished: boolean;
