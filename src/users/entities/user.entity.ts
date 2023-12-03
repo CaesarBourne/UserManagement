@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,7 +18,7 @@ export class User {
   lastName: string;
 
   @Column({})
-  order: object;
+  order: string;
 
   @Column()
   isPublished: boolean;
