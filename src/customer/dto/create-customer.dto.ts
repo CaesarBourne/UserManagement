@@ -7,9 +7,11 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { UserOrderStatus } from '../users.status.enum';
+import { CustomerComplaintStatus } from '../customer.complaint.enum';
 
-export class CreateUserDto {
+export class CreateCustomerDto {
+  title: string;
+
   @IsNotEmpty()
   description: string;
 
@@ -38,9 +40,9 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsIn([
-    UserOrderStatus.OPEN,
-    UserOrderStatus.DONE,
-    UserOrderStatus.IN_PROGRESS,
+    CustomerComplaintStatus.OPEN,
+    CustomerComplaintStatus.DONE,
+    CustomerComplaintStatus.IN_PROGRESS,
   ])
-  status: UserOrderStatus;
+  status: CustomerComplaintStatus;
 }
