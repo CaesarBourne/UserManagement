@@ -11,7 +11,7 @@ export class UsersService {
     @Inject('USER_REPOSITORY')
     private usersRepository: Repository<User>,
   ) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     return this.usersRepository.create();
   }
 
