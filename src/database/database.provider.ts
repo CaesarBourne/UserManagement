@@ -1,3 +1,4 @@
+import { Customer } from 'src/customer/entities/customer.entity';
 import { User } from 'src/users/entities/user.entity';
 import { DataSource } from 'typeorm';
 
@@ -12,7 +13,7 @@ export const databaseProviders = [
         username: 'root',
         password: '',
         database: 'usertest',
-        entities: [User],
+        entities: [User, Customer],
         // entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
       });
