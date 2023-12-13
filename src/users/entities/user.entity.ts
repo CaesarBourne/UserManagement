@@ -17,9 +17,6 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column({})
-  order: string;
-
   @Column()
   status: boolean;
 

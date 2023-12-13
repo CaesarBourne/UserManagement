@@ -17,11 +17,8 @@ export class Customer {
   lastName: string;
 
   @Column({})
-  order: string;
+  complaint: string;
 
   @Column()
   status: boolean;
-
-  @Column()
-  role: string;
 }
