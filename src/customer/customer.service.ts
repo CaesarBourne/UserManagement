@@ -9,6 +9,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CustomerService {
@@ -25,6 +26,7 @@ export class CustomerService {
     customer.firstName = firstname;
     customer.lastName = lastname;
     customer.complaint = complaint;
+    customer.id = uuidv4();
     try {
       await customer.save();
     } catch (error) {
