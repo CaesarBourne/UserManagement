@@ -1,19 +1,42 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CustomerService {
+  private logger = new Logger('CustomerService');
   constructor(
-    @Inject('USER_REPOSITORY')
+    @Inject('CUSTOMER_REPOSITORY')
     private customerRepository: Repository<Customer>,
   ) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
-    const customerDetails = this.customerRepository.create(createCustomerDto);
-    return await this.customerRepository.save(customerDetails);
+    const customer = new Customer();
+    const { username, firstname, lastname, complaint } = createCustomerDto;
+    customer.username = username;
+    customer.firstName = firstname;
+    customer.lastName = lastname;
+    customer.complaint = complaint;
+    try {
+      await customer.save();
+    } catch (error) {
+      this.logger.error(
+        `failed to create custmeomer for user :  ${error} . Data ${createCustomerDto} `,
+      );
+      throw new InternalServerErrorException(`Server error "${error}`);
+    }
+    return customer;
+    // const customerDetails = this.customerRepository.create(createCustomerDto);
+
+    // return await this.customerRepository.save(customerDetails);
   }
 
   findAll(id: number) {
