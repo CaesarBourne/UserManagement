@@ -15,12 +15,12 @@ export class CreateCustomerDto {
   @IsNotEmpty()
   complaint: string;
 
-  @IsString()
+  @IsString({ message: 'Enter a valid username' })
   @MinLength(4)
   @MaxLength(20)
   username: string;
 
-  @IsString()
+  @IsString({ message: 'Enter a valid first name ' })
   @MinLength(1)
   @MaxLength(30)
   firstname: string;

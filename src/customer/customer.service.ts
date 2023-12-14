@@ -31,9 +31,9 @@ export class CustomerService {
       await customer.save();
     } catch (error) {
       this.logger.error(
-        `failed to create custmeomer for user :  ${error} . Data ${createCustomerDto} `,
+        `failed to create customer for user :  ${error} . Data ${createCustomerDto} `,
       );
-      throw new InternalServerErrorException(`Server error "${error}`);
+      throw new InternalServerErrorException(`Server error ${error}`);
     }
     return customer;
     // const customerDetails = this.customerRepository.create(createCustomerDto);
