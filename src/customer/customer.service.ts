@@ -29,7 +29,10 @@ export class CustomerService {
     customer.lastName = lastname;
     customer.complaint = complaint;
     customer.id = uuidv4();
-    const savedCustomer = await this.customerRepository.create(customer);
+    const createdCustomer = this.customerRepository.create(customer);
+
+    const savedCustomer = this.customerRepository.save(createdCustomer);
+
     this.logger.verbose(
       `Succesfully added customer to database   "${JSON.stringify(
         savedCustomer,

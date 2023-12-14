@@ -17,7 +17,7 @@ import { Customer } from './customer/entities/customer.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'placid101%',
+      password: '',
       database: 'usertest',
       // entities: [User, Customer],
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
