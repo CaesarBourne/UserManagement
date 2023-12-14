@@ -15,7 +15,9 @@ import { v4 as uuidv4 } from 'uuid';
 export class CustomerService {
   private logger = new Logger('CustomerService');
   constructor(
-    @Inject('CUSTOMER_REPOSITORY')
+    // @Inject('CUSTOMER_REPOSITORY')
+    // private customerRepository: Repository<Customer>,
+    @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
   ) {}
 
@@ -27,18 +29,13 @@ export class CustomerService {
     customer.lastName = lastname;
     customer.complaint = complaint;
     customer.id = uuidv4();
-    try {
-      await customer.save();
-    } catch (error) {
-      this.logger.error(
-        `failed to create customer for user :  ${error} . Data ${createCustomerDto} `,
-      );
-      throw new InternalServerErrorException(`Server error ${error}`);
-    }
-    return customer;
-    // const customerDetails = this.customerRepository.create(createCustomerDto);
-
-    // return await this.customerRepository.save(customerDetails);
+    const savedCustomer = await this.customerRepository.create(customer);
+    this.logger.verbose(
+      `Succesfully added customer to database   "${JSON.stringify(
+        savedCustomer,
+      )}" `,
+    );
+    return savedCustomer;
   }
 
   findAll(id: number) {
