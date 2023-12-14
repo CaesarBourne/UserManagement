@@ -9,12 +9,15 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Repository } from 'typeorm';
 import { Customer } from './entities/customer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CustomerService {
   private logger = new Logger('CustomerService');
   constructor(
-    @Inject('CUSTOMER_REPOSITORY')
+    // @Inject('CUSTOMER_REPOSITORY')
+    // private customerRepository: Repository<Customer>,
+    @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
   ) {}
 
@@ -25,18 +28,14 @@ export class CustomerService {
     customer.firstName = firstname;
     customer.lastName = lastname;
     customer.complaint = complaint;
-    try {
-      await customer.save();
-    } catch (error) {
-      this.logger.error(
-        `failed to create custmeomer for user :  ${error} . Data ${createCustomerDto} `,
-      );
-      throw new InternalServerErrorException(`Server error "${error}`);
-    }
-    return customer;
-    // const customerDetails = this.customerRepository.create(createCustomerDto);
-
-    // return await this.customerRepository.save(customerDetails);
+    customer.id = uuidv4();
+    const savedCustomer = await this.customerRepository.create(customer);
+    this.logger.verbose(
+      `Succesfully added customer to database   "${JSON.stringify(
+        savedCustomer,
+      )}" `,
+    );
+    return savedCustomer;
   }
 
   findAll(id: number) {
