@@ -15,6 +15,9 @@ export class CreateCustomerDto {
   @IsNotEmpty()
   complaint: string;
 
+  @IsNotEmpty()
+  customerID: string;
+
   @IsString({ message: 'Enter a valid username' })
   @MinLength(4)
   @MaxLength(20)
@@ -29,6 +32,10 @@ export class CreateCustomerDto {
   @MinLength(1)
   @MaxLength(30)
   lastname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 
   // @IsString()
   // @MinLength(8)

@@ -3,13 +3,16 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({ name: 'customer' })
 export class Customer extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ length: 500 })
   username: string;
 
   @Column('text')
   description: string;
+
+  @Column()
+  customerID: string;
 
   @Column()
   firstName: string;
@@ -21,5 +24,5 @@ export class Customer extends BaseEntity {
   complaint: string;
 
   @Column()
-  status: boolean;
+  status: string;
 }

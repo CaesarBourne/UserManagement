@@ -21,7 +21,7 @@ export class CustomerController {
   }
 
   @Get()
-  findAll(id: number) {
+  findAll(id: string) {
     return this.customerService.findAll(id);
   }
 
