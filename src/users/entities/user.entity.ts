@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Column()
-  status: boolean;
+  status: string;
 
   @Column()
   role: string;
