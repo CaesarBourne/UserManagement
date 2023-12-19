@@ -15,8 +15,7 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto) {
     const user = new User();
-    const { username, firstname, lastname, description, status } =
-      createUserDto;
+    const { username, firstname, lastname, description } = createUserDto;
 
     user.username = username;
     user.firstName = firstname;
