@@ -15,12 +15,15 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto) {
     const user = new User();
-    const { username, firstname, lastname, description } = createUserDto;
+    const { username, firstname, lastname, description, password, role } =
+      createUserDto;
 
     user.username = username;
     user.firstName = firstname;
     user.lastName = lastname;
     user.description = description;
+    user.password = password;
+    user.role = role;
     user.status = UserOrderStatus.OPEN;
 
     // user.id = uuidv4();
@@ -28,7 +31,7 @@ export class UsersService {
     this.logger.debug(
       `Succesfully created user to  server   "${JSON.stringify(createdUser)}" `,
     );
-    const savedUser = this.usersRepository.save(createdUser);
+    const savedUser = await this.usersRepository.save(createdUser);
 
     this.logger.verbose(
       `Succesfully added user to database   "${JSON.stringify(savedUser)}" `,
