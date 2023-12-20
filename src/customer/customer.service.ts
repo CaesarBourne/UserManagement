@@ -34,7 +34,7 @@ export class CustomerService {
     customer.status = CustomerComplaintStatus.OPEN;
 
     customer.customerID = uuidv4();
-    const createdCustomer = this.customerRepository.create(customer);
+    const createdCustomer = await this.customerRepository.create(customer);
 
     this.logger.debug(
       `Succesfully created customer to  server   "${JSON.stringify(
