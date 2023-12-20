@@ -7,12 +7,23 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipeBuilder,
+  HttpStatus,
+  FileTypeValidator,
+  ParseFilePipe,
+  MaxFileSizeValidator,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+const MAX_PROFILE_PICTURE_SIZE_IN_BYTES = 2 * 1024 * 1024;
+const VALID_UPLOADS_MIME_TYPES = ['image/jpeg', 'image/png'];
 
 @Controller('customer')
 export class CustomerController {
@@ -27,6 +38,32 @@ export class CustomerController {
   @Get()
   findAll(id: string) {
     return this.customerService.findAll(id);
+  }
+
+  // @Post('upload')
+  // @UseInterceptors(FileInterceptor('file'))
+  // public async uploadFile(
+  //   @UploadedFile(
+  //     new ParseFilePipe({
+  //       validators: [
+  //         new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+  //         new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
+  //       ],
+  //     }),
+  //     // new ParseFilePipeBuilder()
+  //     //   .addFileTypeValidator({ fileType: 'image/jpeg|image/jpg|image/png' })
+  //     //   .addMaxSizeValidator({ maxSize: MAX_PROFILE_PICTURE_SIZE_IN_BYTES })
+  //     //   .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+  //   )
+  //   file,
+  // ) {
+  //   return file;
+  // }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  public async uploadFile(@UploadedFile() file) {
+    return file;
   }
 
   @Get(':id')
