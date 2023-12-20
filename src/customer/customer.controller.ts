@@ -21,9 +21,10 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 const MAX_PROFILE_PICTURE_SIZE_IN_BYTES = 2 * 1024 * 1024;
-const VALID_UPLOADS_MIME_TYPES = ['image/jpeg', 'image/png'];
+const VALID_UPLOADS_MIME_TYPES = '.(png|jpeg|jpg)';
 
 @Controller('customer')
 export class CustomerController {
@@ -40,31 +41,38 @@ export class CustomerController {
     return this.customerService.findAll(id);
   }
 
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('file'))
-  // public async uploadFile(
-  //   @UploadedFile(
-  //     new ParseFilePipe({
-  //       validators: [
-  //         new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-  //         new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
-  //       ],
-  //     }),
-  //     // new ParseFilePipeBuilder()
-  //     //   .addFileTypeValidator({ fileType: 'image/jpeg|image/jpg|image/png' })
-  //     //   .addMaxSizeValidator({ maxSize: MAX_PROFILE_PICTURE_SIZE_IN_BYTES })
-  //     //   .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
-  //   )
-  //   file,
-  // ) {
-  //   return file;
-  // }
-
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  public async uploadFile(@UploadedFile() file) {
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'public/img/caesar',
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  public async uploadFile(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: VALID_UPLOADS_MIME_TYPES }),
+          new MaxFileSizeValidator({
+            maxSize: MAX_PROFILE_PICTURE_SIZE_IN_BYTES,
+          }),
+        ],
+      }),
+    )
+    file,
+  ) {
     return file;
   }
+
+  // @Post('upload')
+  // @UseInterceptors(FileInterceptor('file'))
+  // public async uploadFile(@UploadedFile() file) {
+  //   return file;
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
