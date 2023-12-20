@@ -9,16 +9,16 @@ export class AdminStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  validateUser(username: string, password: string) {
-    const user = this.authService.validateUser(username, password);
+  validateUser(username: string) {
+    const user = this.authService.validateUser(username);
     if (!user) {
       throw new UnauthorizedException();
     }
     return user;
   }
 
-  async validate(username: string, password: string) {
-    const user = await this.authService.validateUser(username, password);
+  async validate(username: string) {
+    const user = await this.authService.validateUser(username);
     if (!user && user.role != 'admin') {
       throw new UnauthorizedException();
     }
