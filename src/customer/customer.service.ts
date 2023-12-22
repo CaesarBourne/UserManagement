@@ -11,6 +11,7 @@ import { Customer } from './entities/customer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { CustomerComplaintStatus } from './customer.complaint.enum';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class CustomerService {
@@ -23,6 +24,15 @@ export class CustomerService {
   ) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
+    const existingUser = await this.validateUser(createCustomerDto.username);
+
+    this.logger.debug(
+      `existing customer status   "${JSON.stringify(existingUser)}" `,
+    );
+    if (existingUser.status == 1) {
+      return { status: 1, message: 'user already exists in database' };
+    }
+
     const customer = new Customer();
     const { username, firstname, lastname, complaint, description, status } =
       createCustomerDto;
@@ -50,13 +60,28 @@ export class CustomerService {
     );
     return savedCustomer;
   }
+  async validateUser(username: string): Promise<any> {
+    const user = await this.findOne(username);
+
+    console.log('username Customer $$$ ', username);
+
+    this.logger.debug(
+      ` Value checkd in database if user exists   "${JSON.stringify(user)}" `,
+    );
+
+    if (user) {
+      return { status: 1, message: 'user already exists' };
+    } else {
+      return { status: 0, message: 'New User' };
+    }
+  }
 
   findAll(id: string) {
     return this.customerRepository.findOneBy({ id });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  findOne(username: string) {
+    return this.customerRepository.findOneBy({ username });
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {

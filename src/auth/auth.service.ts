@@ -17,7 +17,7 @@ export class AuthService {
     //   const { password, ...result } = user;
     //   return result;
     // }
-    console.log('username $$$ ', user);
+    console.log('username $$$ ', username);
 
     this.logger.debug(
       ` Value checkd in database if user exists   "${JSON.stringify(user)}" `,
@@ -57,6 +57,10 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto) {
     const existingUser = await this.validateUser(createUserDto.username);
+
+    this.logger.debug(
+      `existing user statu   "${JSON.stringify(existingUser)}" `,
+    );
     if (existingUser.status == 0) {
       return this.usersService.create(createUserDto);
     } else {
