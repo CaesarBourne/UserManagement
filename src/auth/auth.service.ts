@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
@@ -17,6 +17,7 @@ export class AuthService {
     //   const { password, ...result } = user;
     //   return result;
     // }
+    console.log('username $$$ ', user);
 
     this.logger.debug(
       ` Value checkd in database if user exists   "${JSON.stringify(user)}" `,
@@ -30,10 +31,21 @@ export class AuthService {
   }
 
   async login(user: any) {
+    const existingUser = await this.validateUser(user.username);
+    this.logger.verbose(
+      `User status in database    "${JSON.stringify(existingUser)}" `,
+    );
+    if (existingUser.status == 0) {
+      throw new UnauthorizedException(
+        'User does not exist in database, please provide Valid user ',
+      );
+    }
+
     const payload = { username: user.username, sub: user.password };
     const loginCredentials = {
       access_token: this.jwtService.sign(payload),
     };
+
     this.logger.debug(
       `Succesfully generated token on server   "${JSON.stringify(
         loginCredentials,

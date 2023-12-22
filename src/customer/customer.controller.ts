@@ -41,12 +41,12 @@ export class CustomerController {
     return this.customerService.findAll(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post('uploadImage')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: 'public/img/caesar',
+        destination: 'public/img',
         filename: (req, file, cb) => {
           cb(null, file.originalname);
         },
