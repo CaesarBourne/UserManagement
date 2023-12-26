@@ -41,7 +41,7 @@ export class CustomerController {
     return this.customerService.findAll(id);
   }
 
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Post('uploadImage')
   @UseInterceptors(
     FileInterceptor('file', {
